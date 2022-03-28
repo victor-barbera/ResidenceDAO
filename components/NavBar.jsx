@@ -1,12 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useMoralis } from "react-moralis";
 import Link from 'next/link'
+import Account from './account';
 
 const NavBar = () => {
-  const [active, setActive] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
+  useMoralis();
+  const [active, setActive] = useState(false);
+ // const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [setIsAuthenticated] = useState(false);
+  const [isAuthModalVisible, setIsAuthModalVisible] = useState(false);
 
-  const handleHamburguerClick = () => setActive((prev) => !prev)
-  const handleAuthenticateClick = () => setIsAuthenticated((prev) => !prev)
+
+  const handleHamburguerClick = () => setActive((prev) => !prev);
+  const handleAuthenticateClick = () => setIsAuthenticated((prev) => !prev);
+
+  useEffect(() => {
+    const connectorId = window.localStorage.getItem("connectorId");
+    console.log(isAuthenticated,isWeb3Enabled,isWeb3EnableLoading)
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
+      enableWeb3({ provider: connectorId });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, isWeb3Enabled]);
 
   return (
     <nav className="flex flex-wrap items-center bg-slate-900 p-3 ">
@@ -66,9 +81,10 @@ const NavBar = () => {
             </a>
           </Link>
         </div>
-        <button className="flex basis-1/3 items-center justify-end" onClick={handleAuthenticateClick}>
-          {!isAuthenticated ? 'Athenticate' : '0x123...9876'}
-        </button>
+        <Account />
+        {/* <button className="flex basis-1/3 items-center justify-end" onClick={handleAuthenticateClick}>
+          {!isAuthenticated ? 'Authenticate' : '0x123...9876'}
+        </button> */}
       </div>
     </nav>
   )
