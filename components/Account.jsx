@@ -34,12 +34,12 @@ const styles = {
     },
   };
 function Account() {
-    const { authenticate,isAuthenticated, account, chainId, logout } =
+    const { authenticate, isAuthenticated, account, chainId, logout } =
       useMoralis();
     const handleAuthenticateClick = () => authenticate({ signingMessage: "Login with you metamask wallet" })
     const handleLogoutClick = ()=> logout();
 
-    if(!isAuthenticated){
+    if(!isAuthenticated || !account) {
         return (
             <>
               <button className="flex basis-1/3 items-center justify-end"  style={styles.text} onClick={handleAuthenticateClick}> 
