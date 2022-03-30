@@ -28,7 +28,7 @@ const DUMMY_POLLS: Array<Poll> = [
   {
     id: 2,
     title: "Encara falta per les metaproposals - XIP1334",
-    description: "Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.",
+    description: "Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori. Descripció bastant més llarga en aquest cas, per provar multiline.",
     date: (new Date()).toUTCString(),
     value: undefined,
     result: {yes:23,no:47,abs:10},

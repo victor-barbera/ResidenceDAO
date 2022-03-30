@@ -1,7 +1,44 @@
+import { useEffect, useState } from 'react'
 import Poll from '../../components/Poll'
+import RoundButton from '../../components/RoundButton'
 
 const ActivePoll = (props: any) => {
-  return <Poll {...props}>Hello</Poll>
+  const [remaining, setRemaining] = useState("")
+  const [votedcolor, setVotedcolor] = useState("text-blue")
+  // ? Ha de calcular el temps restant i anar-se actualitzant (si queda poc mostrar segons)
+  useEffect(()=>{
+    setRemaining("5D 10H")
+  },[])
+  useEffect(()=>{
+    console.log(props.value)
+    switch(props.value) {
+      case 'Yes': 
+        setVotedcolor("text-green-600")
+        break
+      case 'No':
+        setVotedcolor("text-red-600")
+        break
+      case 'Abs':
+        setVotedcolor("text-blue-600")
+        break
+    }
+  },[props.value])
+  return (
+    <Poll {...props} footerText="Leading option: Yes with 58%"> {/* ? Posar el Yes en negrita (renderProps?¿) */}
+      <p className='text-slate-300 my-3'>{props.description}</p> {/* ? Falta afegir un link a github */}
+      <div className="flex items-end"> {/*  (voteButton or voted), remaining || Results */}
+        <div>
+          {props.value ? <p className={votedcolor}>You've voted <b>{props.value}</b></p> : <RoundButton>VOTE</RoundButton>}
+          <p className='text-slate-300 mt-3'>{`${remaining} REMAINING`}</p>
+        </div>
+        <div className='flex flex-col items-end ml-auto'>
+          <p className='text-slate-600'><b>Yes: </b>{props.result.yes}%</p>
+          <p className='text-slate-600'><b>No: </b>{props.result.no}%</p>
+          <p className='text-slate-600'><b>Abs: </b>{props.result.abs}%</p>
+        </div>
+      </div>
+    </Poll>
+  )
 }
 
 export default ActivePoll

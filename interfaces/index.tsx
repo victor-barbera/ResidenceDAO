@@ -1,3 +1,4 @@
+// ? Falta afegir la duració
 export interface Poll {
   id: number
   title: string
