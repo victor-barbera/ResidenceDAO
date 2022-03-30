@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import ClosedPoll from './ClosedPoll'
 import {Poll, Result, Category} from '../../interfaces'
-import TabPolls from './TabPolls'
 
 const History: NextPage = () => {
 
@@ -14,7 +13,7 @@ const History: NextPage = () => {
   return (
   <div className="flex justify-center">
     <div className="flex-col lg:basis-1/2">
-      <h1 className="text-white font-semibold antialiased text-2xl mt-10">4 CLOSED POLLS</h1>
+      <h1 className="text-white font-semibold antialiased text-2xl< mt-10">{DUMMY_CATEGORIES['All'].length} CLOSED POLLS</h1>
         <Tab.Group >
           <Tab.List className="flex p-1 space-x-1 bg-blue-900/20 rounded-xl mt-10">
             {Object.keys(DUMMY_CATEGORIES).map((category) => (
@@ -65,19 +64,24 @@ const DUMMY_POLLS_APPROVED: Array<Poll>  = [
   value: "Yes",
   result: {yes:23,no:47,abs:10},
   qty: 10,
-  addr: "0x06D...6583"
+  addr: "0x06D...6583",
+  duration: 7,
+  state: "Approved"
 },
 {
   id: 3,
   title: "Encara falta per les metaproposals - XIP1334",
   description: "Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.",
   date: (new Date()).toUTCString(),
-  value: undefined,
+  value: "No",
   result: {yes:23,no:47,abs:10},
   qty: 36,
-  addr: "0x06D...6583"
+  addr: "0x06D...6583",
+  duration: 30,
+  state: "Approved"
+
 }]
-const DUMMY_POLLS_DECLINED: Array<Poll>  = [    
+const DUMMY_POLLS_REJECTED: Array<Poll>  = [    
   {
   id: 4,
   title: "Titol del proposal - XIP1334",
@@ -86,22 +90,27 @@ const DUMMY_POLLS_DECLINED: Array<Poll>  = [
   value: "Yes",
   result: {yes:23,no:47,abs:10},
   qty: 10,
-  addr: "0x06D...6583"
+  addr: "0x06D...6583",
+  duration: 30,
+  state: "Rejected"
+
 },
 {
   id: 5,
   title: "Encara falta per les metaproposals - XIP1334",
   description: "Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.",
   date: (new Date()).toUTCString(),
-  value: undefined,
+  value: "Yes",
   result: {yes:23,no:47,abs:10},
   qty: 36,
-  addr: "0x06D...6583"
+  addr: "0x06D...6583",
+  duration: 7,
+  state: "Rejected"
 }]
 const DUMMY_CATEGORIES: Object = {
-  All: [...DUMMY_POLLS_APPROVED, ...DUMMY_POLLS_DECLINED],
+  All: [...DUMMY_POLLS_APPROVED, ...DUMMY_POLLS_REJECTED],
   Approved: DUMMY_POLLS_APPROVED,
-  Rejected: DUMMY_POLLS_DECLINED,
+  Rejected: DUMMY_POLLS_REJECTED,
 }
 
 // Dades ja transformades desde front.

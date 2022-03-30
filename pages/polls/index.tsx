@@ -6,7 +6,7 @@ const Polls: NextPage = () => {
   return (
     <div className="flex justify-center">
       <div className="flex-col lg:basis-1/2">
-        <h1 className="text-white font-semibold antialiased text-2xl mt-10">5 ACTIVE POLLS</h1>
+        <h1 className="text-white font-semibold antialiased text-2xl mt-10">{DUMMY_POLLS.length} ACTIVE POLLS</h1>
         {DUMMY_POLLS.map(poll => <ActivePoll {...poll} />)}
       </div>
     </div>
@@ -23,7 +23,9 @@ const DUMMY_POLLS: Array<Poll> = [
     value: "Yes",
     result: {yes:23,no:47,abs:10},
     qty: 10,
-    addr: "0x06D...6583"
+    addr: "0x06D...6583",
+    duration: 7,
+    state: "Active"
   },
   {
     id: 2,
@@ -33,7 +35,10 @@ const DUMMY_POLLS: Array<Poll> = [
     value: undefined,
     result: {yes:23,no:47,abs:10},
     qty: 36,
-    addr: "0x06D...6583"
+    addr: "0x06D...6583",
+    duration: 30,
+    state: "Active"
+
   }
 ]
 

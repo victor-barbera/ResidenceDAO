@@ -8,6 +8,8 @@ export interface Poll {
   result: Result
   qty: number
   addr: string
+  duration: number
+  state: string
   // state: string // pending, approved & declined
 }
 
