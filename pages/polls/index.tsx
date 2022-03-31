@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import ActivePoll from './ActivePoll'
-import {Poll, Result} from '../../interfaces'
+import {Poll} from '../../interfaces'
 
 const Polls: NextPage = () => {
   return (
