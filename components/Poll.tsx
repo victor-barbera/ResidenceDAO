@@ -7,7 +7,7 @@ const Poll = (props: any) => {
           <h2 className="text-slate-300 text-lg">{props.title}</h2>
         </div>
         <div className="flex items-center rounded bg-slate-800 ml-auto my-auto py-2 px-3">
-          <p className="font-mono text-slate-500">{`${props.qty} BTC | ${props.addr}`}</p>
+          <p className="font-mono text-slate-500">{props.qty} BTC ⮕ {props.addr}</p>
         </div>
       </div>
       {props.children}
