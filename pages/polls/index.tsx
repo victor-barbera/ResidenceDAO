@@ -1,10 +1,15 @@
 import type { NextPage } from 'next'
+import Head from 'next/head'
 import ActivePoll from './ActivePoll'
 import {Poll} from '../../interfaces'
 
 const Polls: NextPage = () => {
   return (
     <div className="flex justify-center">
+      <Head>
+        <title>Polls | ResidenceDAO</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="flex-col lg:basis-1/2">
         <h1 className="text-white font-semibold antialiased text-2xl mt-10">5 ACTIVE POLLS</h1>
         {DUMMY_POLLS.map(poll => <ActivePoll {...poll} />)}
