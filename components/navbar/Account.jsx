@@ -1,16 +1,20 @@
-import { useMoralis } from 'react-moralis'
 import Image from 'next/image'
+import { useMoralis } from 'react-moralis'
+import { Menu } from '@headlessui/react'
+import RoundButton from '../RoundButton'
+import RoundBlockie from '../RoundBlockie'
 
 const Account = () => {
   const { authenticate, isAuthenticated, account, logout } = useMoralis()
   const handleAuthenticateClick = () =>
     authenticate({ signingMessage: 'Login with you metamask wallet' })
   const handleLogoutClick = () => logout()
+  const addrShortener = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
   if (!isAuthenticated || !account) {
     return (
-      <button
-        className="flex basis-1/3 items-center justify-end"
+      <RoundButton
+        className="ml-auto flex items-center"
         onClick={handleAuthenticateClick}
       >
         <Image
@@ -19,29 +23,17 @@ const Account = () => {
           src="/metamask.png"
           alt="Metamask icon."
         />
-        <p className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-slate-700 hover:text-white lg:mx-6 lg:inline-flex lg:w-auto">
-          Authenticate
-        </p>
-      </button>
+        <p className="ml-2 font-mono">Authenticate</p>
+      </RoundButton>
     )
   } else {
     return (
-      <>
-        <div>
-          <p className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-slate-700 hover:text-white lg:mx-6 lg:inline-flex lg:w-auto">
-            {account}
-          </p>
-        </div>
-
-        <div>
-          <button
-            className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-slate-700 hover:text-white lg:mx-6 lg:inline-flex lg:w-auto"
-            onClick={handleLogoutClick}
-          >
-            LogOut
-          </button>
-        </div>
-      </>
+      <div className="ml-auto mr-3 flex items-center rounded bg-slate-800 py-2 px-3 ring ring-slate-700">
+        <RoundBlockie addr={account} />
+        <p className="ml-3 font-mono text-slate-500">
+          {addrShortener(account)}
+        </p>
+      </div>
     )
   }
 }

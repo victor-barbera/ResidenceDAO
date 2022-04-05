@@ -1,6 +1,6 @@
-const RoundButton = ({children, onClick}) => {
+const RoundButton = ({children, onClick, className}) => {
   return (
-    <button className="py-1 px-4 bg-purple-500 focus:ring-purple-600 ring-2 hover:bg-purple-700 rounded-full" onClick={onClick}>{children}</button>
+    <button className={"py-1 px-4 bg-purple-500 focus:ring-purple-600 ring-2 hover:bg-purple-700 rounded-full " + className} onClick={onClick}>{children}</button>
   )
 }
 

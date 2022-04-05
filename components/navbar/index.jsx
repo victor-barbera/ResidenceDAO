@@ -1,20 +1,10 @@
-import { useState, useEffect } from 'react'
-// import { useMoralis } from "react-moralis";
+import { useState } from 'react'
 import Link from 'next/link'
 import Account from './Account';
 
 const NavBar = () => {
-//   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
-//   useMoralis();
   const [active, setActive] = useState(false);
   const handleHamburguerClick = () => setActive((prev) => !prev);
-//   useEffect(() => {
-//     const connectorId = window.localStorage.getItem("connectorId");
-//     console.log(isAuthenticated,isWeb3Enabled,isWeb3EnableLoading)
-//     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
-//       enableWeb3({ provider: connectorId });
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [isAuthenticated, isWeb3Enabled]);
   
   return (
     <nav className="flex flex-wrap items-center bg-slate-900 p-3 ">
