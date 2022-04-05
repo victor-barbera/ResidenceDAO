@@ -3,7 +3,9 @@ import Head from 'next/head'
 import ActivePoll from './ActivePoll'
 import {Poll} from '../../interfaces'
 
+
 const Polls: NextPage = () => {
+
   return (
     <div className="flex justify-center">
       <Head>
