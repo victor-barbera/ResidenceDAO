@@ -4,6 +4,7 @@ import Poll from '../../components/Poll'
 const ClosedPoll = (props: any) => {
   const [closedAt, setClosedAt] = useState("")
   const [votedcolor, setVotedcolor] = useState("text-blue")
+  let footerText= "";
   // ? Ha de calcular el temps restant i anar-se actualitzant (si queda poc mostrar segons)
   useEffect(()=>{
     setClosedAt((props)=>{
@@ -23,12 +24,20 @@ const ClosedPoll = (props: any) => {
         setVotedcolor("text-blue-600")
         break
     }
-  },[props.value])
+  },[props.value]);
+
+  useEffect(()=>{
+    if(props.state=="Approved"){
+      footerText = "Approved: "+props.result.yes
+    }else if(props.state=="Rejected"){
+      footerText = "Rejected: "+props.result.no
+    }
+  },
+  // comprobar si hem de ficar alguna dependenci
+  []);
+
   return (
-    <Poll {...props} footerText= {props.state+": "+props.value+ 
-    props.result.yes
-      //props.value=='Yes' ? props.result.yes : props.value=='No' ? props.result.no : props.result.abs
-       + "  %"}> {/* ? Posar el Yes en negrita (renderProps?¿) */}
+    <Poll {...props} footerText= {footerText}> {/* ? Posar el Yes en negrita (renderProps?¿) */}
       <p className='text-slate-300 my-3'>{props.description}</p> {/* ? Falta afegir un link a github */}
       <div className="flex items-end"> {/*  (voteButton or voted), remaining || Results */}
         <div>
