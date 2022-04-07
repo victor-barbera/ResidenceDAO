@@ -29,7 +29,7 @@ const Account = () => {
   ) : (
     <div className="ml-auto mr-3 flex items-center rounded bg-slate-800 py-2 px-3 ring ring-slate-700">
       <RoundBlockie addr={account} />
-      <p className="ml-3 font-mono text-slate-500 lg:text-red-500">{addrShortener(account)}</p>
+      <p className="ml-3 font-mono text-slate-500">{addrShortener(account)}</p>
     </div>
   )
 }
