@@ -1,22 +1,20 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import ActivePoll from './ActivePoll'
-import {Poll} from '../../interfaces'
-
+import { Poll } from '../../interfaces'
 
 const Polls: NextPage = () => {
-
   return (
-    <div className="flex justify-center">
+    <>
       <Head>
         <title>Polls | ResidenceDAO</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex-col lg:basis-1/2">
-        <h1 className="text-white font-semibold antialiased text-2xl mt-10">{DUMMY_POLLS.length} ACTIVE POLLS</h1>
-        {DUMMY_POLLS.map(poll => <ActivePoll {...poll} />)}
-      </div>
-    </div>
+      <h1 className="mt-10 text-2xl font-semibold text-white antialiased">
+        {DUMMY_POLLS.length} ACTIVE POLLS
+      </h1>
+      {DUMMY_POLLS.map((poll) => <ActivePoll {...poll} key={poll.id} />)}
+    </>
   )
 }
 
@@ -24,30 +22,30 @@ const Polls: NextPage = () => {
 const DUMMY_POLLS: Array<Poll> = [
   {
     id: 1,
-    title: "Titol del proposal - XIP1334",
-    description: "Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.",
-    date: (new Date()).toUTCString(),
-    value: "Yes",
-    result: {yes:23,no:47,abs:10},
+    title: 'Titol del proposal - XIP1334',
+    description:
+      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
+    date: 'Thu, 14 Apr 2022 15:45:30 GMT',
+    value: 'Yes',
+    result: { yes: 23, no: 47, abs: 10 },
     qty: 10,
-    addr: "0x06D...6583",
+    addr: '0x06D...6583',
     duration: 7,
-    state: "Active"
+    state: 'Active',
   },
   {
     id: 2,
-    title: "Encara falta per les metaproposals - XIP1334",
-    description: "Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori. Descripció bastant més llarga en aquest cas, per provar multiline.",
-    date: (new Date()).toUTCString(),
+    title: 'Encara falta per les metaproposals - XIP1334',
+    description:
+      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori. Descripció bastant més llarga en aquest cas, per provar multiline.',
+    date: 'Thu, 07 Apr 2022 15:45:30 GMT',
     value: undefined,
-    result: {yes:23,no:47,abs:10},
+    result: { yes: 23, no: 47, abs: 10 },
     qty: 36,
-    addr: "0x06D...6583",
+    addr: '0x06D...6583',
     duration: 30,
-    state: "Active"
-
-  }
+    state: 'Active',
+  },
 ]
-
 
 export default Polls

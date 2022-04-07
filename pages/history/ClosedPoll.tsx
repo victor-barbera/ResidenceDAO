@@ -11,7 +11,6 @@ const ClosedPoll = (props: any) => {
     })
   },[])
   useEffect(()=>{
-    console.log(props.value)
     switch(props.value) {
       case 'Yes': 
         setVotedcolor("text-green-600")

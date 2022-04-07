@@ -1,20 +1,16 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import Account from './Account';
+import Account from './Account'
+
 
 const NavBar = () => {
-  const [active, setActive] = useState(false);
-  const handleHamburguerClick = () => setActive((prev) => !prev);
-  
   return (
     <nav className="flex flex-wrap items-center bg-slate-900 p-3 ">
       <div
-        className={`${
-          active ? '' : 'hidden'
-        }   w-full lg:inline-flex lg:w-auto lg:flex-grow`}
+        className="flex w-full"
       >
         <Link href="/">
-          <a className="mr-4 inline-flex items-center p-2 lg:basis-1/3">
+          <a className="mr-4 inline-flex items-center p-2 basis-1/3">
             <svg
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
@@ -27,39 +23,19 @@ const NavBar = () => {
             </span>
           </a>
         </Link>
-        <button
-          className=" ml-auto inline-flex rounded p-3 text-white outline-none hover:bg-slate-700 hover:text-white lg:hidden"
-          onClick={handleHamburguerClick}
-        >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
-
-        <div className="flex w-full flex-col items-start lg:inline-flex lg:h-auto  lg:w-auto lg:flex-row lg:items-center lg:basis-1/3 lg:justify-center">
+        <div className="flex inline-flex h-auto w-auto items-center basis-1/3 justify-center">
           <Link href="/polls">
-            <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-slate-700 hover:text-white lg:inline-flex lg:w-auto lg:mx-6">
+            <a className="w-auto rounded px-3 py-2 mx-6 font-bold text-white hover:bg-slate-700">
               Polls
             </a>
           </Link>
           <Link href="/history">
-            <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-slate-700 hover:text-white lg:inline-flex lg:w-auto lg:mx-6">
+            <a className="w-auto rounded px-3 py-2 mx-6 font-bold text-white hover:bg-slate-700">
               History
             </a>
           </Link>
           <Link href="/balances">
-            <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-slate-700 hover:text-white lg:inline-flex lg:w-auto lg:mx-6">
+            <a className="w-auto rounded px-3 py-2 mx-6 font-bold text-white hover:bg-slate-700">
               Balances
             </a>
           </Link>

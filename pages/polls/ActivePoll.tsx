@@ -10,23 +10,22 @@ const ActivePoll = (props: any) => {
     setRemaining("5D 10H")
   },[])
   useEffect(()=>{
-    console.log(props.value)
     switch(props.value) {
       case 'Yes': 
-        setVotedcolor("text-green-600")
-        break
+      setVotedcolor("text-green-600")
+      break
       case 'No':
         setVotedcolor("text-red-600")
         break
-      case 'Abs':
-        setVotedcolor("text-blue-600")
-        break
-    }
-  },[props.value])
-
-  const voteClickHandler = ()=> {
-    
-  }
+        case 'Abs':
+          setVotedcolor("text-blue-600")
+          break
+        }
+      },[props.value])
+      
+      const voteClickHandler = ()=> {
+        
+      }
 
   return (
     <Poll {...props} footerText="Leading option: Yes with 58%"> {/* ? Posar el Yes en negrita (renderProps?¿) */}
