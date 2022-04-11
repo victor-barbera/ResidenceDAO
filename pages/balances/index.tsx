@@ -1,8 +1,9 @@
 import type { NextPage } from 'next'
+import TransactionsTable from './TransactionsTable'
 
 const Balances: NextPage = () => {
   return (
-    <div>Balances</div>
+    <TransactionsTable />
   )
 }
 
