@@ -21,3 +21,14 @@ export interface Result {
 export interface Category {
   category: Array<Poll>,
 }
+
+export interface Transaction {
+  id: number
+  state: string
+  txHash: string
+  from: string
+  to: string
+  value: number
+  date: string
+
+}

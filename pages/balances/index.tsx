@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import TransactionsTable from './TransactionsTable'
 import RoundButton from '../../components/RoundButton'
 import Dropdown from '../../components/Dropdown'
+import { Transaction } from '../../interfaces'
+
 
 const Balances: NextPage = () => {
   const [wallet, setWallet] = useState(null);
@@ -77,42 +79,13 @@ const Balances: NextPage = () => {
   )
 }
 
-const COLUMNS_EVENTS_TRANSFER: Array<Poll> = [
-  'Description',
-  'Amount',
-  'Date',
-  'State'
-]
+// const COLUMNS_EVENTS_TRANSFER: Array = [
+//   'Description',
+//   'Amount',
+//   'Date',
+//   'State'
+// ]
 
-// Dades ja transformades desde front.
-const DUMMY_EVENTS_TRANSFER: Array<Poll> = [
-  {
-    id: 1,
-    state: 'pending',
-    txHash: '0x64d4b51ba78bfdea503ed861908d62b2bdc498b15250a90b9ccf8be095ce7b08',
-    from: '0xF9F613BDec2703ede176cC98A2276fA1F618A1b1',
-    to: '0x0000000000000000000000000000000000000000',
-    value: '1000',
-    date: 'Thu, 14 Apr 2022 15:45:30 GMT'
-  },
-  {
-    id: 2,
-    state: 'confirmed',
-    txHash: '0x64d4b51ba78bfdea503ed861908d62b2bdc498b15250a90b9ccf8be095ce7b08',
-    from: '0x0000000000000000000000000000000000000000',
-    to: '0xF9F613BDec2703ede176cC98A2276fA1F618A1b1',
-    value: '100',
-    date: 'Thu, 14 Apr 2022 11:45:30 GMT'
-  },
-  {
-    id: 3,
-    state: 'failed',
-    txHash: '0x64d4b51ba78bfdea503ed861908d62b2bdc498b15250a90b9ccf8be095ce7b08',
-    from: '0x0000000000000000000000000000000000000000',
-    to: '0xF9F613BDec2703ede176cC98A2276fA1F618A1b1',
-    value: '100',
-    date: 'Thu, 14 Apr 2022 09:45:30 GMT'
-  },
-]
+
 const DUMMY_BALANCE : Number = 100000;
 export default Balances
