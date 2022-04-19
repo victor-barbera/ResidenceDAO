@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
+import {ClipboardIcon} from '@heroicons/react/outline'
+import toast from 'react-hot-toast'
+
 
 const TransactionTr =  (props: any) => {
   const [stateIcon, setStateIcon] = useState("")
   const [direction, setDirection] = useState("")
   const [directionIcon, setDirectionIcon] = useState("")
   const [wallet, setWallet] = useState("")
-
-  const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
   useEffect(()=>{
 
@@ -34,13 +35,26 @@ const TransactionTr =  (props: any) => {
     }
   },[props.state, props.from, props.to ])
 
+  const copyToClipboard = ()=> {
+    navigator.clipboard.writeText(props.addr)
+    toast.success("Copied to clipboard!")
+  }
+  const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
+
+
   return (
     <>
       <tr className="border-b border-slate-900 bg-slate-700">
-        <td className="px-5 py-4 text-center text-slate-300">
-            <div className="flex flex-row gap-4">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d={directionIcon} clipRule="evenodd" /></svg>                    
-                <p className="basis-3/4">Tokens {direction} {wallet}</p>
+        <td className="px-4 py-4 text-center text-slate-300">
+            <div className="flex flex-row">
+                <svg className="basis-1/4 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d={directionIcon} clipRule="evenodd" /></svg>                    
+                <p className="basis-3/4 text-left" >Tokens {direction} </p>
+
+            </div>
+            <div className="flex flex-row">
+                <p className="basis-3/4 ml-11 text-left" > {wallet}</p>
+                <button onClick={copyToClipboard}><ClipboardIcon className='basis-1/4 w-5 h-5 text-slate-500 hover:text-slate-300' /></button>
+
             </div>
         </td>
         <td className="px-5 py-4 text-center text-slate-300"> {props.value}$</td>
