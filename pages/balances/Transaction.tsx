@@ -67,8 +67,8 @@ const TransactionTr =  (props: any) => {
         <td>
           <a target="_blank" href={"https://polygonscan.com/tx/"+props.txHash}>
               <div className="flex flex-row  p-1  mx-10 bg-slate-800 shadow-md sm:rounded">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d={stateIcon} clipRule="evenodd" /></svg>
                 <p className="basis-3/4 text-center text-slate-300">{props.state}</p>
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d={stateIcon} clipRule="evenodd" /></svg>
               </div>
           </a>
         </td>
