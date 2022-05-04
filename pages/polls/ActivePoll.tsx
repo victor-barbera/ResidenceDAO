@@ -28,9 +28,9 @@ const ActivePoll = (props: any) => {
       }
 
   return (
-    <Poll {...props} footerText="Leading option: Yes with 58%"> {/* ? Posar el Yes en negrita (renderProps?¿) */}
-      <p className='text-slate-300 my-3'>{props.description}</p> {/* ? Falta afegir un link a github */}
-      <div className="flex items-end"> {/*  (voteButton or voted), remaining || Results */}
+    <Poll {...props} footerText="Leading option: Yes with 58%"> {/* TODO: Posar el Yes en negrita (renderProps?¿) */}
+      <p className='text-slate-300 my-3'>{props.description}</p> {/* TODO: Falta afegir un link a github */}
+      <div className="flex items-end">
         <div>
           {props.value ? <p className={votedcolor}>You've voted <b>{props.value}</b></p> : <RoundButton onClick={voteClickHandler}>Vote</RoundButton>}
           <p className='text-slate-300 mt-3'>{`${remaining} REMAINING`}</p>

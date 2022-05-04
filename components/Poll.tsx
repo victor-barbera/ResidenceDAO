@@ -7,7 +7,7 @@ const Poll = (props: any) => {
     toast.success("Copied to clipboard!")
   }
   return (
-    <div className="bg-slate-900 border border-slate-600 rounded-lg my-8 pt-5 px-5"> {/* full-card */}
+    <div className="bg-slate-900 border border-slate-600 rounded-lg my-8 pt-5 px-5 lg:w-[56rem]"> {/* full-card */}
       <div className="flex flex-row"> {/* date,title || qty,dest */}
         <div>
           <p className="text-slate-700 text-sm">POSTED ON {props.date} | POLL ID {props.id}</p>

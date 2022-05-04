@@ -9,8 +9,7 @@ export interface Poll {
   qty: number
   addr: string
   duration: number
-  state: string
-  // state: string // pending, approved & declined
+  status: 'Pending' | 'Approved' | 'Rejected'
 }
 
 export interface Result {

@@ -31,7 +31,7 @@ const DUMMY_POLLS: Array<Poll> = [
     qty: 10,
     addr: '0x06D...6583',
     duration: 7,
-    state: 'Active',
+    status: 'Pending',
   },
   {
     id: 2,
@@ -39,12 +39,12 @@ const DUMMY_POLLS: Array<Poll> = [
     description:
       'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori. Descripció bastant més llarga en aquest cas, per provar multiline.',
     date: 'Thu, 07 Apr 2022 15:45:30 GMT',
-    value: undefined,
+    value: 'No',
     result: { yes: 23, no: 47, abs: 10 },
     qty: 36,
     addr: '0x06D...6583',
     duration: 30,
-    state: 'Active',
+    status: 'Pending',
   },
 ]
 
