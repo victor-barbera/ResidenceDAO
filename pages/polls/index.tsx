@@ -7,7 +7,7 @@ const Polls: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Polls | ResidenceDAO</title>
+        <title>Polls - ResidenceDAO</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="mt-10 text-2xl font-semibold text-white antialiased">
