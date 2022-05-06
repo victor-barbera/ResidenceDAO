@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import {ClipboardIcon} from '@heroicons/react/outline'
 import toast from 'react-hot-toast'
+import { useMoralis} from 'react-moralis'
+
 
 
 const TransactionTr =  (props: any) => {
+  const { account } = useMoralis();
+
   const [stateIcon, setStateIcon] = useState("")
   const [direction, setDirection] = useState("")
   const [directionIcon, setDirectionIcon] = useState("")
@@ -23,7 +27,7 @@ const TransactionTr =  (props: any) => {
         setStateIcon("M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z")
         break
     }
-    if(props.from =='0x0000000000000000000000000000000000000000'){
+    if(props.from == account.toLowerCase() ){
       // you are the sender
       setDirection("sent");
       setDirectionIcon("M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z");
@@ -36,7 +40,7 @@ const TransactionTr =  (props: any) => {
       setShortWallet(addrShortener(props.from))
 
     }
-  },[props.state, props.from, props.to ])
+  },[account, props.state, props.from, props.to ])
 
   const copyToClipboard = ()=> {
     navigator.clipboard.writeText(wallet)
@@ -65,7 +69,7 @@ const TransactionTr =  (props: any) => {
           {props.date}
         </td>
         <td>
-          <a target="_blank" href={"https://polygonscan.com/tx/"+props.txHash}>
+          <a target="_blank" href={"https://mumbai.polygonscan.com/tx/"+props.txHash}>
               <div className="flex flex-row  p-1  mx-10 bg-slate-800 shadow-md sm:rounded">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d={stateIcon} clipRule="evenodd" /></svg>
                 <p className="basis-3/4 text-center text-slate-300">{props.state}</p>

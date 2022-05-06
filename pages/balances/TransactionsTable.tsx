@@ -4,10 +4,8 @@ import { Transaction } from '../../interfaces'
 const Transactions =  (props: any) => {
   return (
     <>
-        <div className="relative  my-8 overflow-x-auto bg-slate-900 px-10 py-10 shadow-md sm:rounded-lg">
-            <h1 className=" text-2xl font-semibold text-white antialiased">
-                TRANSACTIONS
-            </h1>
+
+
             <table className="mt-8 w-full table-fixed rounded-lg bg-slate-800  py-5 px-5 text-slate-400">
                 <thead>
                 <tr>
@@ -29,7 +27,6 @@ const Transactions =  (props: any) => {
                     {props.data.map((transaction:any) => <TransactionTr {...transaction} key={transaction.id} />)}
                 </tbody>
             </table>
-        </div>
     </>
 
   )
