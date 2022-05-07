@@ -7,16 +7,16 @@ import RoundButton from '../RoundButton'
 import RoundBlockie from '../RoundBlockie'
 import {LogoutIcon} from '@heroicons/react/outline'
 
+const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
 const Account = () => {
   const { authenticate, isAuthenticated, account, logout, isWeb3Enabled, isWeb3EnableLoading, enableWeb3 } = useMoralis()
-
+  
   useEffect(() => {
     const connectorId = window.localStorage.getItem('connectorId') as MoralisType.Web3ProviderType
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
       enableWeb3({ provider: connectorId })
   }, [isAuthenticated, isWeb3Enabled])
-  const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
   const handleAuthenticateClick = () =>
     authenticate({ signingMessage: 'Login with you metamask wallet' })
   const handleLogoutClick = () => logout()
@@ -59,7 +59,6 @@ const Account = () => {
             </button>
           )}
         </Menu.Item>
-        {/* ... */}
       </Menu.Items>
       </Transition>
     </Menu>

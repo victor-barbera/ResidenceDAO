@@ -4,7 +4,10 @@ import { MoralisProvider } from 'react-moralis'
 import { Toaster } from 'react-hot-toast'
 import NavBar from '../components/NavBar'
 
-
+/* TODO:
+        * Fer que hagafi els decimals i tokenName del SC.
+        * Plantejar si la duració pot ser dinamica.
+*/
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <MoralisProvider appId={process.env.NEXT_PUBLIC_MORALIS_APPLICATION_ID!} serverUrl={process.env.NEXT_PUBLIC_MORALIS_SERVER_URL!}>

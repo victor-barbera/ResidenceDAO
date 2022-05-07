@@ -1,51 +1,69 @@
+import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useMoralis, useMoralisQuery } from 'react-moralis'
 import ActivePoll from './ActivePoll'
 import { Poll } from '../../interfaces'
 
+const POLL_DURATION = 60*60 // in seconds
+
+const decodeVote = (vote: string) => {
+  switch(vote) {
+    case "0": return "Abs"
+    case "1": return "Yes"
+    case "2": return "No"
+  }
+}
+
+
 const Polls: NextPage = () => {
+  const [activePolls, setAP] =useState<Poll[]>([])
+  const { account } = useMoralis()
+  const { data: pollsData, isLoading: pollsLoading } = useMoralisQuery("Polls",query=>query.descending("pollId_decimal"),[],{live:true})
+  const { data: votesData, isLoading: votesLoading } = useMoralisQuery("Votes", query=>query.descending("pollId_decimal"),[],{live:true})
+  useEffect(()=>{
+    const getPollVotes = (pollId: string) => {
+      const result = {yes: 0, no: 0, abs:0}
+      let userVote
+      votesData.filter(vote=> vote.attributes.pollId === pollId).map(poll=> {
+        if(poll.attributes.addr === account) userVote = decodeVote(poll.attributes.value)
+        switch(poll.attributes.value) {
+          case "0": result.abs++
+          case "1": result.yes++
+          case "2": result.no++
+        }
+      })
+      return {result, userVote}
+
+    }
+    if(!pollsLoading && !votesLoading && pollsData.length) setAP((pollsData.filter(poll=> Date.now()/1000 <= Number(poll.attributes.pollCreatedAt) + Number(process.env.NEXT_PUBLIC_POLL_DURATION)).map(poll=> {
+      const { result, userVote} = getPollVotes(poll.attributes.pollId)
+      return {
+          id: poll.attributes.pollId,
+          title: poll.attributes.title,
+          description: poll.attributes.description,
+          date: Number(poll.attributes.pollCreatedAt),
+          value: userVote,
+          result: result,
+          qty: poll.attributes.qty,
+          addr: poll.attributes.destAddr,
+    }})))
+  },[pollsData, votesData]);
+
   return (
     <>
       <Head>
         <title>Polls - ResidenceDAO</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {activePolls?.length ? (<>
       <h1 className="mt-10 text-2xl font-semibold text-white antialiased">
-        {DUMMY_POLLS.length} ACTIVE POLLS
+        {activePolls.length} ACTIVE POLLS
       </h1>
-      {DUMMY_POLLS.map((poll) => <ActivePoll {...poll} key={poll.id} />)}
+      {activePolls.map((poll) => <ActivePoll {...poll} key={poll.id} />)}</>
+      ) : <h1 className="mt-10 text-2xl font-semibold text-white antialiased">There are no active polls to display</h1>}
     </>
   )
 }
-
-// Dades ja transformades desde front.
-const DUMMY_POLLS: Array<Poll> = [
-  {
-    id: 1,
-    title: 'Titol del proposal - XIP1334',
-    description:
-      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: 'Thu, 14 Apr 2022 15:45:30 GMT',
-    value: 'Yes',
-    result: { yes: 23, no: 47, abs: 10 },
-    qty: 10,
-    addr: '0x06D...6583',
-    duration: 7,
-    status: 'Pending',
-  },
-  {
-    id: 2,
-    title: 'Encara falta per les metaproposals - XIP1334',
-    description:
-      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori. Descripció bastant més llarga en aquest cas, per provar multiline.',
-    date: 'Thu, 07 Apr 2022 15:45:30 GMT',
-    value: 'No',
-    result: { yes: 23, no: 47, abs: 10 },
-    qty: 36,
-    addr: '0x06D...6583',
-    duration: 30,
-    status: 'Pending',
-  },
-]
 
 export default Polls

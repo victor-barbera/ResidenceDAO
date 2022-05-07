@@ -32,13 +32,12 @@ const ClosedPoll = (props: any) => {
           <p className='text-slate-300 mt-3'>{`${closedAt} AGO`}</p>
         </div>
         <div className='flex flex-col items-end ml-auto'>
-          <p className='text-slate-600'><b>Yes: </b>{props.result.yes}%</p>
-          <p className='text-slate-600'><b>No: </b>{props.result.no}%</p>
-          <p className='text-slate-600'><b>Abs: </b>{props.result.abs}%</p>
+          <p className='text-slate-600'><b>Yes: </b>{props.result.yes}</p>
+          <p className='text-slate-600'><b>No: </b>{props.result.no}</p>
+          <p className='text-slate-600'><b>Abs: </b>{props.result.abs}</p>
         </div>
       </div>
-    </Poll>
-  )
+    </Poll>  )
 }
 
 export default ClosedPoll
