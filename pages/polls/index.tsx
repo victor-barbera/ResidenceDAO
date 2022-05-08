@@ -5,11 +5,10 @@ import { useMoralis, useMoralisQuery } from 'react-moralis'
 import ActivePoll from './ActivePoll'
 import { Poll } from '../../interfaces'
 
-const POLL_DURATION = 60*60 // in seconds
 
 const decodeVote = (vote: string) => {
   switch(vote) {
-    case "0": return "Abs"
+    case "0": return "Blank"
     case "1": return "Yes"
     case "2": return "No"
   }
@@ -23,12 +22,12 @@ const Polls: NextPage = () => {
   const { data: votesData, isLoading: votesLoading } = useMoralisQuery("Votes", query=>query.descending("pollId_decimal"),[],{live:true})
   useEffect(()=>{
     const getPollVotes = (pollId: string) => {
-      const result = {yes: 0, no: 0, abs:0}
+      const result = {yes: 0, no: 0, blank:0}
       let userVote
       votesData.filter(vote=> vote.attributes.pollId === pollId).map(poll=> {
         if(poll.attributes.addr === account) userVote = decodeVote(poll.attributes.value)
         switch(poll.attributes.value) {
-          case "0": result.abs++
+          case "0": result.blank++
           case "1": result.yes++
           case "2": result.no++
         }

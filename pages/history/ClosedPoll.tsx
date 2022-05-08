@@ -34,7 +34,7 @@ const ClosedPoll = (props: any) => {
         <div className='flex flex-col items-end ml-auto'>
           <p className='text-slate-600'><b>Yes: </b>{props.result.yes}</p>
           <p className='text-slate-600'><b>No: </b>{props.result.no}</p>
-          <p className='text-slate-600'><b>Abs: </b>{props.result.abs}</p>
+          <p className='text-slate-600'><b>Blank: </b>{props.result.blank}</p>
         </div>
       </div>
     </Poll>  )

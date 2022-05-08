@@ -15,6 +15,8 @@ function secondsToDhm(seconds: number) {
   return dDisplay + hDisplay + mDisplay;
 }
 
+const displayAmount = (amount: number, decimals: number) => amount/(10**decimals)
+
 const ActivePoll = (props: any) => {
   const [mVisible, setMV] = useState(false)
   const [remaining, setRemaining] = useState("")
@@ -35,20 +37,25 @@ const ActivePoll = (props: any) => {
           setVotedcolor("text-blue-600")
           break
         }
-      },[props.value])
-      
+      },[props.value]) 
 
-    const voteClickHandler = ()=> {
-       setMV(true)
-    }
-    const leadingOption = ()=> {
-      const total = props.result.yes + props.result.no + props.result.abs
-      if(props.result.yes == props.result.no) return "it's a draw"
-      if(props.result.yes > props.result.no) return `Yes with ${props.result.yes/total*100}%`
-      return `No with ${props.result.no/total*100}%`
-    }
+      const leadingOption = ()=> {
+        const total = props.result.yes + props.result.no + props.result.blank
+        if(props.result.yes == props.result.no) return "it's a draw"
+        if(props.result.yes > props.result.no) return `Yes with ${props.result.yes/total*100}%`
+        return `No with ${props.result.no/total*100}%`
+      }
+      
+      const voteClickHandler = ()=> {
+         setMV(true)
+      }
+
+      const handleVote = (vote: number) => {
+        setMV(false)
+      }
 
   return (
+  <>
     <Poll {...props} footerText={`Leading option: ${leadingOption()}`}> {/* TODO: Posar el Yes en negrita (renderProps?¿) */}
       <p className='text-slate-300 my-3'>{props.description}</p> {/* TODO: Falta afegir un link a github */}
       <div className="flex items-end">
@@ -63,6 +70,78 @@ const ActivePoll = (props: any) => {
         </div>
       </div>
     </Poll>
+    <Transition appear show={mVisible} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={() => setMV(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-medium leading-6 text-slate-900"
+                  >
+                    Poll {props.id} ballot
+                  </Dialog.Title>
+                  {/* <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Your payment has been successfully submitted. We’ve sent
+                      you an email with all of the details of your order.
+                    </p>
+                  </div> */}
+                  <Dialog.Description as="p" className="text-sm text-slate-500 mt-2">
+                  To cast your vote you'll have to sign an approval for spending a weighted amount of the total which is: {displayAmount(props.qty,6)/2} MMT
+                  </Dialog.Description>
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 mb-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none w-full"
+                      onClick={()=> handleVote(1)}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 mb-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none w-full"
+                      onClick={()=> handleVote(2)}
+                    >
+                      No
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 mb-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none w-full"
+                      onClick={()=> handleVote(0)}
+                    >
+                      Blank vote
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
   )
 }
 

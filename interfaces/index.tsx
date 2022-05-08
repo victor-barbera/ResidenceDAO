@@ -15,7 +15,7 @@ export interface Poll {
 export interface Result {
   yes: number
   no: number
-  abs: number
+  blank: number
 }
 export interface Category {
   category: Array<Poll>,

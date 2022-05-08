@@ -7,6 +7,7 @@ import NavBar from '../components/NavBar'
 /* TODO:
         * Fer que hagafi els decimals i tokenName del SC.
         * Plantejar si la duració pot ser dinamica.
+        * Ficar totes les funcions auxiliars en una llibreria.
 */
 function MyApp({ Component, pageProps }: AppProps) {
   return (
