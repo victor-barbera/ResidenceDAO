@@ -1,7 +1,11 @@
 import { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useMoralis } from 'react-moralis'
+import { ethers } from 'ethers'
 import Poll from '../../components/Poll'
 import RoundButton from '../../components/RoundButton'
+import { signTransferWithAuthorization } from '../../lib'
+import DAO from '../../Contracts/DAO.json'
 
 function secondsToDhm(seconds: number) {
   seconds = Number(seconds);
@@ -21,7 +25,7 @@ const ActivePoll = (props: any) => {
   const [mVisible, setMV] = useState(false)
   const [remaining, setRemaining] = useState("")
   const [votedcolor, setVotedcolor] = useState("text-blue")
-  // ? Ha de calcular el temps restant i anar-se actualitzant (si queda poc mostrar segons)
+  const { account, isAuthenticated, web3, provider } = useMoralis()
   useEffect(()=>{
     setRemaining(secondsToDhm(Math.floor(props.date+Number(process.env.NEXT_PUBLIC_POLL_DURATION) - (Date.now()/1000))))
   })
@@ -33,8 +37,8 @@ const ActivePoll = (props: any) => {
       case 'No':
         setVotedcolor("text-red-600")
         break
-        case 'Abs':
-          setVotedcolor("text-blue-600")
+        case 'Blank':
+          setVotedcolor("text-white")
           break
         }
       },[props.value]) 
@@ -50,8 +54,13 @@ const ActivePoll = (props: any) => {
          setMV(true)
       }
 
-      const handleVote = (vote: number) => {
+      const handleVote = async (vote: number) => {
         setMV(false)
+        const signature = await signTransferWithAuthorization(account, process.env.NEXT_PUBLIC_DAO_ADDRESS, props.qty, provider)
+        const contract = new ethers.Contract(process.env.NEXT_PUBLIC_DAO_ADDRESS!,DAO.abi, web3?.getSigner())
+        const transaction = await contract.voteWithDeposit(props.id, vote, signature.from, signature.to, signature.value, signature.validAfter, signature.validBefore, signature.nonce, signature.v, signature.r, signature.s);
+        await transaction.wait()
+
       }
 
   return (
@@ -60,13 +69,13 @@ const ActivePoll = (props: any) => {
       <p className='text-slate-300 my-3'>{props.description}</p> {/* TODO: Falta afegir un link a github */}
       <div className="flex items-end">
         <div>
-          {props.value ? <p className={votedcolor}>You've voted <b>{props.value}</b></p> : <RoundButton onClick={voteClickHandler}>Vote</RoundButton>}
+          {isAuthenticated ? (props.value ? <p className={votedcolor}>You've voted <b>{props.value}</b></p> :  <RoundButton onClick={voteClickHandler}>Vote</RoundButton>) : <p className='text-purple-600'>Authenticate to vote</p>}
           <p className='text-slate-300 mt-3'>{`${remaining} remaining`}</p>
         </div>
         <div className='flex flex-col items-end ml-auto'>
           <p className='text-slate-600'><b>Yes: </b>{props.result.yes}</p>
           <p className='text-slate-600'><b>No: </b>{props.result.no}</p>
-          <p className='text-slate-600'><b>Abs: </b>{props.result.abs}</p>
+          <p className='text-slate-600'><b>Blank: </b>{props.result.blank}</p>
         </div>
       </div>
     </Poll>
@@ -102,12 +111,6 @@ const ActivePoll = (props: any) => {
                   >
                     Poll {props.id} ballot
                   </Dialog.Title>
-                  {/* <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
-                  </div> */}
                   <Dialog.Description as="p" className="text-sm text-slate-500 mt-2">
                   To cast your vote you'll have to sign an approval for spending a weighted amount of the total which is: {displayAmount(props.qty,6)/2} MMT
                   </Dialog.Description>

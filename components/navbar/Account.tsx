@@ -11,11 +11,8 @@ const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}
 
 const Account = () => {
   const { authenticate, isAuthenticated, account, logout, isWeb3Enabled, isWeb3EnableLoading, enableWeb3 } = useMoralis()
-  
   useEffect(() => {
-    const connectorId = window.localStorage.getItem('connectorId') as MoralisType.Web3ProviderType
-    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
-      enableWeb3({ provider: connectorId })
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3()
   }, [isAuthenticated, isWeb3Enabled])
   const handleAuthenticateClick = () =>
     authenticate({ signingMessage: 'Login with you metamask wallet' })

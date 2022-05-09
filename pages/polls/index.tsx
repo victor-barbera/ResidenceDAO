@@ -24,12 +24,15 @@ const Polls: NextPage = () => {
     const getPollVotes = (pollId: string) => {
       const result = {yes: 0, no: 0, blank:0}
       let userVote
-      votesData.filter(vote=> vote.attributes.pollId === pollId).map(poll=> {
-        if(poll.attributes.addr === account) userVote = decodeVote(poll.attributes.value)
-        switch(poll.attributes.value) {
+      votesData.filter(vote=> vote.attributes.pollId === pollId).map(vote=> {
+        if(vote.attributes.addr === account) userVote = decodeVote(vote.attributes.value)
+        switch(vote.attributes.value) {
           case "0": result.blank++
+          break;
           case "1": result.yes++
+          break;
           case "2": result.no++
+          break;
         }
       })
       return {result, userVote}
