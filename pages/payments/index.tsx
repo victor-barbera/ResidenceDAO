@@ -1,24 +1,22 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import Web3Utils from 'web3-utils'
 import toast from 'react-hot-toast'
 import TransactionsTable from './TransactionsTable'
 import RoundButton from '../../components/RoundButton'
-import { Transaction } from '../../interfaces'
 import Moralis from "moralis";
 import { useMoralis, useMoralisWeb3Api } from 'react-moralis'
+import { signTransferWithAuthorization } from '../../lib'
+
 
 const SC_ADDRESS = '0x5dc380906c9C291f3e1FfB261Afe5bb47D76bf7f'
 const SC_CHAIN = 'mumbai';
 
 const Balances: NextPage = () => {
-    const { authenticate, isAuthenticated, account, logout, isWeb3Enabled, isWeb3EnableLoading } = useMoralis();
+    const { isAuthenticated, account, provider } = useMoralis();
     const Web3Api = useMoralisWeb3Api();
-    Moralis.onWeb3Enabled(async (result) => {
-        setProvider(result.provider)
-    });  
 
     useEffect( () => {
+        console.log("provider",provider)
         console.log(isAuthenticated, account)
         if(isAuthenticated && account){
             createSubscription();
@@ -31,7 +29,6 @@ const Balances: NextPage = () => {
 
     const [ walletTo, setWalletTo] = useState('');
     const [ amount, setAmount] = useState('0');
-    const [ provider, setProvider] = useState(undefined);
     const [ tokenName, setTokenName] = useState('');
     const [ tokenDecimals , setTokenDecimals ] = useState(6); 
     const [ balance, setBalance] = useState('0');
@@ -39,27 +36,14 @@ const Balances: NextPage = () => {
 
     const createSubscription = async ()=> {
         // create subscriptions
-        let query = new Moralis.Query('TransfersMMTSevMumbai');
-        const subscribe = await query.subscribe();
-        // subscribe.on('create',async (object)=>{
-        //     console.log('new Object', object);
-        //     let state = 'pending';
-        //     if( object.attributes.confirmed ) state = 'confirmed';
-        //     let newTx =   {
-        //         id: object.id,
-        //         state: state,
-        //         txHash: object.attributes.transaction_hash,
-        //         from: object.attributes.from,
-        //         to: object.attributes.to,
-        //         value: object.attributes.value,
-        //         date: object.attributes.block_timestamp.toDateString() +' ' +object.attributes.block_timestamp.toLocaleTimeString('es-ES')
-        //     }
-        //     console.log('new Transaction', newTx);
-        //     fetchTokenTransfers();
-        //     fetchTokenBalances();
-        // })
+        const address = account.toLowerCase();
+        let fromQuery = new Moralis.Query('TransfersMMTSevMumbai');
+        fromQuery.equalTo("from", address)
+        let toQuery = new Moralis.Query('TransfersMMTSevMumbai');
+        toQuery.equalTo("to", address)
+        const subscribe = await  Moralis.Query.or(fromQuery, toQuery).subscribe();
+
         subscribe.on('update', async (object) => {
-    
             console.log('object updated', object);
             let state = 'pending';
             if( object.attributes.confirmed ) {
@@ -111,7 +95,7 @@ const Balances: NextPage = () => {
             let error = 'Wallet incorrect';
             toast.error(error);
         }
-        const JSONdata = await signTransferWithAuthorization(account.toLowerCase(), walletTo, parseInt(amount*(10**tokenDecimals)));
+        const JSONdata = await signTransferWithAuthorization(account.toLowerCase(), walletTo, parseInt(amount*(10**tokenDecimals)),provider);
         toast.success('Thank you, your transaction will be submmited in a few seconds');
 
         const endpoint = 'http://localhost:4040/api/transfer_with_authorization'
@@ -132,88 +116,6 @@ const Balances: NextPage = () => {
         }else{
             toast.error('Somethiing went wrong: ', result);
         }
-    }
-    const signTransferWithAuthorization = async (addressSigner, addressTo, amountToSign ) => {
-        console.log(addressSigner, addressTo, amountToSign)
-        // generate signature fields
-        const deadlineTimeAfter = Math.floor((new Date().getTime()-1000000)/1000);
-        const deadlineTimeBefore = Math.floor((new Date().getTime()+3600000)/1000);
-        const nonce = Web3Utils.randomHex(32);
-
-        const domain = {
-            name: "Metatransaction Monetary Token",
-            version: "1",
-            chainId: 80001,
-            verifyingContract: "0x5dc380906c9C291f3e1FfB261Afe5bb47D76bf7f"
-        }; 
-        const EIP712Domain = [
-            { name: 'name', type: 'string' },
-            { name: 'version', type: 'string' },
-            { name: 'chainId', type: 'uint256' },
-            { name: 'verifyingContract', type: 'address' },
-        ];
-
-        // TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)
-        const TransferWithAuthorization = [
-            { name: 'from', type: 'address' },
-            { name: 'to', type: 'address' },
-            { name: 'value', type: 'uint256' },
-            { name: 'validAfter', type: 'uint256' },
-            { name: 'validBefore', type: 'uint256' },
-            { name: 'nonce', type: 'bytes32' },
-            ];
-        const message = {
-            from: addressSigner,
-            to: addressTo,
-            value: amountToSign,
-            validAfter: deadlineTimeAfter,
-            validBefore: deadlineTimeBefore,
-            nonce: nonce            
-        };
-        const data = JSON.stringify({
-            types: {
-            EIP712Domain,
-            TransferWithAuthorization
-            },
-            domain,
-            primaryType: 'TransferWithAuthorization',
-            message
-        })
-        var params = [ addressSigner, data  ];
-        var method = 'eth_signTypedData_v3';
-        let signature = null;
-        let result = await new Promise(resolve => { 
-            provider.sendAsync(
-                {
-                    method,
-                    params,
-                    from: addressSigner,
-                },function(err, result) {
-                    if (err) {
-                        return console.error("eth_signTypedData_v3 error",err);
-                    }
-                    signature = result.result.substring(2);
-                    console.log(signature);
-                    resolve(signature);
-                    }
-                );
-        })
-        const r = "0x" + signature.substring(0, 64);
-        const s = "0x" + signature.substring(64, 128);
-        const v = parseInt(signature.substring(128, 130), 16);
-        let JSONdata = JSON.stringify({
-            from: addressSigner,
-            to: addressTo,
-            value: amountToSign,
-            validAfter: deadlineTimeAfter,
-            validBefore: deadlineTimeBefore,
-            nonce: nonce,
-            r,
-            s,
-            v
-        })
-        console.log(JSONdata);
-        return JSONdata;
     }
 
     const fetchTokenMetadata = async () => {
@@ -252,11 +154,11 @@ const Balances: NextPage = () => {
     const fetchTokenTransfers = async () => {
         console.log("account",account)
         const address = account.toLowerCase();
-        let fromQuery = new Moralis.Query('TransfersMMTSevMumbai');
+        const fromQuery = new Moralis.Query('TransfersMMTSevMumbai');
         fromQuery.equalTo("from", address)
-        let toQuery = new Moralis.Query('TransfersMMTSevMumbai');
+        const toQuery = new Moralis.Query('TransfersMMTSevMumbai');
         toQuery.equalTo("to", address)
-        let txs = await  Moralis.Query.or(fromQuery, toQuery).descending('block_timestamp').find();
+        const txs = await  Moralis.Query.or(fromQuery, toQuery).descending('block_timestamp').find();
         const transactions = [ ];
         for(let tx of txs){
             let state = 'pending';
@@ -296,7 +198,6 @@ const Balances: NextPage = () => {
             <div className="text-2l mx-10 mt-5 bg-slate-900 text-left font-semibold text-white antialiased">
             Transfer
             </div>
-            {/* <div className="mb-5 flex flex-row gap-4"> */}
             <form onSubmit={handleTransferClick}  className="mb-5 flex flex-row gap-4">
                 <input
                     value={walletTo}
@@ -304,7 +205,6 @@ const Balances: NextPage = () => {
                     placeholder="Enter Account"
                     className="mx-10 my-3 basis-2/4 bg-slate-800  p-2 text-slate-400 sm:rounded-lg"/>
 
-                {/* <Dropdown ></Dropdown> */}
 
                 <input
                     value={amount}
@@ -312,19 +212,13 @@ const Balances: NextPage = () => {
                     placeholder="Enter Amount"
                     className="mx-5 my-3 basis-1/4 bg-slate-800  p-2 text-slate-400 sm:rounded-lg"
                 />
-                {/* <div className="  "> */}
-                {/* <input 
-                    className="mx-10 my-3 basis-1/3 p-2 text-slate-400  bg-slate-800  shadow-md sm:rounded-lg"
-                    type="submit"
-                    value="Send" /> */}
+  
                 <RoundButton
                     className=" my-3 ml-5 mr-10 basis-1/4 self-center"
                 >
                     Send
                 </RoundButton>
-                {/* </div> */}
             </form>
-            {/* </div> */}
         </div>
         </div>
         <div className="relative  my-8 overflow-x-auto bg-slate-900 px-10 py-10 shadow-md sm:rounded-lg">
@@ -355,42 +249,4 @@ const Balances: NextPage = () => {
     )
     }
 
-    // const COLUMNS_EVENTS_TRANSFER: Array = [
-    //   'Description',
-    //   'Amount',
-    //   'Date',
-    //   'State'
-    // ]
-    const DUMMY_EVENTS_TRANSFER: Array<Transaction> = [
-    {
-        id: 2,
-        state: 'confirmed',
-        txHash: '0x64d4b51ba78bfdea503ed861908d62b2bdc498b15250a90b9ccf8be095ce7b08',
-        from: '0x0000000000000000000000000000000000000000',
-        to: '0xF9F613BDec2703ede176cC98A2276fA1F618A1b1',
-        value: 100,
-        date: 'Thu, 14 Apr 2022 11:45:30 GMT'
-    },
-    {
-        id: 1,
-        state: 'pending',
-        txHash: '0x64d4b51ba78bfdea503ed861908d62b2bdc498b15250a90b9ccf8be095ce7b08',
-        from: '0xF9F613BDec2703ede176cC98A2276fA1F618A1b1',
-        to: '0x0000000000000000000000000000000000000000',
-        value: 1000,
-        date: 'Thu, 14 Apr 2022 15:45:30 GMT'
-    },
-
-    {
-        id: 3,
-        state: 'failed',
-        txHash: '0x64d4b51ba78bfdea503ed861908d62b2bdc498b15250a90b9ccf8be095ce7b08',
-        from: '0x0000000000000000000000000000000000000000',
-        to: '0xF9F613BDec2703ede176cC98A2276fA1F618A1b1',
-        value: 100,
-        date: 'Thu, 14 Apr 2022 09:45:30 GMT'
-    },
-    ]
-
-    const DUMMY_BALANCE : Number = 100000;
     export default Balances

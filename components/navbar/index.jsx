@@ -34,9 +34,9 @@ const NavBar = () => {
               History
             </a>
           </Link>
-          <Link href="/balances">
+          <Link href="/payments">
             <a className="w-auto rounded px-3 py-2 mx-6 font-bold text-white hover:bg-slate-700">
-              Balances
+              Payments
             </a>
           </Link>
         </div>
