@@ -5,12 +5,14 @@ import Image from 'next/image'
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <>
       <Head>
-        <title>Create Next App</title>
+        <title>ResidenceDAO</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-    </div>
+      <h1 className='mt-10 text-2xl font-semibold text-white antialiased'>Welcome to Residence DAO</h1>
+      <h2 className='mt-10 text-2xl font-semibold text-white antialiased'>System Info</h2>
+    </>
   )
 }
 

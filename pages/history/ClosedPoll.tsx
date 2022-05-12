@@ -24,24 +24,20 @@ const ClosedPoll = (props: any) => {
     }
   },[props.value])
   return (
-    <Poll {...props} footerText= {props.state+": "+props.value+ 
-    props.result.yes
-      //props.value=='Yes' ? props.result.yes : props.value=='No' ? props.result.no : props.result.abs
-       + "  %"}> {/* ? Posar el Yes en negrita (renderProps?¿) */}
-      <p className='text-slate-300 my-3'>{props.description}</p> {/* ? Falta afegir un link a github */}
-      <div className="flex items-end"> {/*  (voteButton or voted), remaining || Results */}
+    <Poll {...props} footerText= {props.status+": "+props.value+ props.result.yes + "  %"}>
+      <p className='text-slate-300 my-3'>{props.description}</p>
+      <div className="flex items-end">
         <div>
           {<p className={votedcolor}>You've voted <b>{props.value}</b></p>}
           <p className='text-slate-300 mt-3'>{`${closedAt} AGO`}</p>
         </div>
         <div className='flex flex-col items-end ml-auto'>
-          <p className='text-slate-600'><b>Yes: </b>{props.result.yes}%</p>
-          <p className='text-slate-600'><b>No: </b>{props.result.no}%</p>
-          <p className='text-slate-600'><b>Abs: </b>{props.result.abs}%</p>
+          <p className='text-slate-600'><b>Yes: </b>{props.result.yes}</p>
+          <p className='text-slate-600'><b>No: </b>{props.result.no}</p>
+          <p className='text-slate-600'><b>Blank: </b>{props.result.blank}</p>
         </div>
       </div>
-    </Poll>
-  )
+    </Poll>  )
 }
 
 export default ClosedPoll
