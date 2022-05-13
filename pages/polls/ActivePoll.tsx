@@ -60,7 +60,6 @@ const ActivePoll = (props: any) => {
         const contract = new ethers.Contract(process.env.NEXT_PUBLIC_DAO_ADDRESS!,DAO.abi, web3?.getSigner())
         const transaction = await contract.voteWithDeposit(props.id, vote, signature.from, signature.to, signature.value, signature.validAfter, signature.validBefore, signature.nonce, signature.v, signature.r, signature.s);
         await transaction.wait()
-
       }
 
   return (
