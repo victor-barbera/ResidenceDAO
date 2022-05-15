@@ -57,6 +57,7 @@ const ActivePoll = (props: any) => {
       const handleVote = async (vote: number) => {
         setMV(false)
         const signature = await signTransferWithAuthorization(account, process.env.NEXT_PUBLIC_DAO_ADDRESS, props.qty, provider)
+        console.log(signature)
         const contract = new ethers.Contract(process.env.NEXT_PUBLIC_DAO_ADDRESS!,DAO.abi, web3?.getSigner())
         const transaction = await contract.voteWithDeposit(props.id, vote, signature.from, signature.to, signature.value, signature.validAfter, signature.validBefore, signature.nonce, signature.v, signature.r, signature.s);
         await transaction.wait()
@@ -111,7 +112,7 @@ const ActivePoll = (props: any) => {
                     Poll {props.id} ballot
                   </Dialog.Title>
                   <Dialog.Description as="p" className="text-sm text-slate-500 mt-2">
-                  To cast your vote you'll have to sign an approval for spending a weighted amount of the total which is: {displayAmount(props.qty,6)/2} MMT
+                  To cast your vote you'll have to sign an approval for spending a weighted amount of the total which is: {displayAmount(props.qty,6)/5} MMT
                   </Dialog.Description>
 
                   <div className="mt-4">

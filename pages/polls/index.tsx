@@ -27,11 +27,11 @@ const Polls: NextPage = () => {
       votesData.filter(vote=> vote.attributes.pollId === pollId).map(vote=> {
         if(vote.attributes.addr === account) userVote = decodeVote(vote.attributes.value)
         switch(vote.attributes.value) {
-          case "0": result.blank++
+          case "0": result.blank += Number(vote.attributes.weight)
           break;
-          case "1": result.yes++
+          case "1": result.yes += Number(vote.attributes.weight)
           break;
-          case "2": result.no++
+          case "2": result.no += Number(vote.attributes.weight)
           break;
         }
       })
