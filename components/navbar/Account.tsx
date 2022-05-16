@@ -1,5 +1,5 @@
 import { useEffect, Fragment } from 'react'
-import Image from 'next/image'
+//import Image from 'next/image'
 import { useMoralis } from 'react-moralis'
 import MoralisType from "moralis";
 import { Menu, Transition } from '@headlessui/react'
@@ -22,7 +22,7 @@ const Account = () => {
       className="ml-auto flex items-center"
       onClick={handleAuthenticateClick}
     >
-      <Image width="30" height="30" src="/metamask.png" alt="Metamask icon." />
+      <img width="30" height="30" src="/metamask.png" alt="Metamask icon." />
       <p className="ml-2 font-mono">Authenticate</p>
     </RoundButton>
   ) : (

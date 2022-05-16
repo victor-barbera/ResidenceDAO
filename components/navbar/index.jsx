@@ -1,4 +1,4 @@
-import Image from 'next/image'
+// import Image from 'next/image'
 import Link from 'next/link'
 import Account from './Account'
 
@@ -11,7 +11,7 @@ const NavBar = () => {
       >
         <Link href="/">
           <a className="mr-4 inline-flex items-center p-2 basis-1/3">
-            <Image width={30} height={30} src="/residence-logo.png" />
+            <img width={30} height={30} src="/residence-logo.png" />
             {/* <svg
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
