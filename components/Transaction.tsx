@@ -27,7 +27,7 @@ const TransactionTr =  (props: any) => {
         setStateIcon("M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z")
         break
     }
-    if(props.from == account.toLowerCase() ){
+    if(props.from == account?.toLowerCase() ){
       // you are the sender
       setDirection("sent");
       setDirectionIcon("M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z");

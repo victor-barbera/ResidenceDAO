@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Poll from '../../components/Poll'
+import Poll from './Poll'
 
 const ClosedPoll = (props: any) => {
   const [closedAt, setClosedAt] = useState("")

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useMoralis, useMoralisQuery } from 'react-moralis'
-import ActivePoll from './ActivePoll'
+import ActivePoll from '../../components/ActivePoll'
 import { Poll } from '../../interfaces'
 
 

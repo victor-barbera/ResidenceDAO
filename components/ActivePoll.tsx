@@ -2,10 +2,10 @@ import { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useMoralis } from 'react-moralis'
 import { ethers } from 'ethers'
-import Poll from '../../components/Poll'
-import RoundButton from '../../components/RoundButton'
-import { signTransferWithAuthorization } from '../../lib'
-import DAO from '../../Contracts/DAO.json'
+import Poll from './Poll'
+import RoundButton from './RoundButton'
+import { signTransferWithAuthorization } from '../lib'
+import DAO from '../Contracts/DAO.json'
 
 function secondsToDhm(seconds: number) {
   seconds = Number(seconds);

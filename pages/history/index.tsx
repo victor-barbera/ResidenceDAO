@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
 import { Tab } from '@headlessui/react'
-import ClosedPoll from './ClosedPoll'
-import { Poll, Result, Category } from '../../interfaces'
+import ClosedPoll from '../../components/ClosedPoll'
+import { Poll } from '../../interfaces'
 
 const TABS = ['All', 'Approved', 'Rejected']
 
@@ -46,12 +46,12 @@ const DUMMY_POLLS: Array<Poll> = [
     title: 'Titol del proposal - XIP1334',
     description:
       'Una curta descripció per descriure per sobre la proposal.',
-    date: new Date().toUTCString(),
+    date: Date.now(),
     value: 'Yes',
-    result: { yes: 23, no: 47, abs: 10 },
+    result: { yes: 23, no: 47, blank: 10 },
     qty: 10,
     addr: '0x06D...6583',
-    duration: 7,
+    //duration: 7,
     status: 'Approved',
   },
   {
@@ -59,12 +59,12 @@ const DUMMY_POLLS: Array<Poll> = [
     title: 'Encara falta per les metaproposals - XIP1334',
     description:
       'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: new Date().toUTCString(),
+    date: Date.now(),
     value: 'No',
-    result: { yes: 23, no: 47, abs: 10 },
+    result: { yes: 23, no: 47, blank: 10 },
     qty: 36,
     addr: '0x06D...6583',
-    duration: 30,
+    //duration: 30,
     status: 'Approved',
   },
   {
@@ -72,12 +72,12 @@ const DUMMY_POLLS: Array<Poll> = [
     title: 'Titol del proposal - XIP1334',
     description:
       'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: new Date().toUTCString(),
+    date: Date.now(),
     value: 'Yes',
-    result: { yes: 23, no: 47, abs: 10 },
+    result: { yes: 23, no: 47, blank: 10 },
     qty: 10,
     addr: '0x06D...6583',
-    duration: 30,
+    //duration: 30,
     status: 'Rejected',
   },
   {
@@ -85,12 +85,12 @@ const DUMMY_POLLS: Array<Poll> = [
     title: 'Encara falta per les metaproposals - XIP1334',
     description:
       'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: new Date().toUTCString(),
+    date: Date.now(),
     value: 'Yes',
-    result: { yes: 23, no: 47, abs: 10 },
+    result: { yes: 23, no: 47, blank: 10 },
     qty: 36,
     addr: '0x06D...6583',
-    duration: 7,
+    //duration: 7,
     status: 'Rejected',
   },
 ]

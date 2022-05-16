@@ -1,11 +1,8 @@
 import TransactionTr from './Transaction'
-import { Transaction } from '../../interfaces'
 
 const Transactions =  (props: any) => {
   return (
     <>
-
-
             <table className="mt-8 w-full table-fixed rounded-lg bg-slate-800  py-5 px-5 text-slate-400">
                 <thead>
                 <tr>

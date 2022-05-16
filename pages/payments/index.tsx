@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import TransactionsTable from './TransactionsTable'
+import TransactionsTable from '../../components/TransactionsTable'
 import RoundButton from '../../components/RoundButton'
 import Moralis from "moralis";
 import { useMoralis, useMoralisWeb3Api } from 'react-moralis'
@@ -32,11 +32,11 @@ const Balances: NextPage = () => {
     const [ tokenName, setTokenName] = useState('');
     const [ tokenDecimals , setTokenDecimals ] = useState(6); 
     const [ balance, setBalance] = useState('0');
-    const [ transactions, setTransactions ] = useState([ ])
+    const [ transactions, setTransactions ] = useState<Array<any>>([])
 
     const createSubscription = async ()=> {
         // create subscriptions
-        const address = account.toLowerCase();
+        const address = account?.toLowerCase();
         let fromQuery = new Moralis.Query('TransfersMMTSevMumbai');
         fromQuery.equalTo("from", address)
         let toQuery = new Moralis.Query('TransfersMMTSevMumbai');
@@ -86,7 +86,7 @@ const Balances: NextPage = () => {
     const handleTransferClick = async (e:any) => {
         e.preventDefault();
         let success = true;
-        if(amount <= 0) {
+        if(Number(amount) <= 0) {
             success = false;
             let error = 'Amount must be > 0 ';
             toast.error(error);
@@ -95,16 +95,16 @@ const Balances: NextPage = () => {
             let error = 'Wallet incorrect';
             toast.error(error);
         }
-        const JSONdata = await signTransferWithAuthorization(account.toLowerCase(), walletTo, parseInt(amount*(10**tokenDecimals)),provider);
+        const JSONdata = await signTransferWithAuthorization(account?.toLowerCase(), walletTo, Number(amount)*(10**Number(tokenDecimals)),provider);
         toast.success('Thank you, your transaction will be submmited in a few seconds');
 
         const endpoint = 'http://localhost:4040/api/transfer_with_authorization'
-        const options = {
+        const options: RequestInit = {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSONdata,
+            body: JSON.stringify(JSONdata),
         }
         const response = await fetch(endpoint, options)
         console.log(response)
@@ -122,7 +122,7 @@ const Balances: NextPage = () => {
         //Get metadata for one token. 
         const tokenMetadata = await Web3Api.token.getTokenMetadata({
             chain: SC_CHAIN,//chainId,
-            addresses: SC_ADDRESS//  [ SC_ADDRESS ]
+            addresses: [SC_ADDRESS]//  [ SC_ADDRESS ]
         });
         if(tokenMetadata){
             console.log(tokenMetadata[0])
@@ -143,8 +143,6 @@ const Balances: NextPage = () => {
         if(balance == undefined) {
             setBalance('0')
         }else{
-            console.log("fetchTokenBalances",balances[0])
-            console.log((10*balance.decimals))
             const decimals = 6;//balance.decimals
             const balanceDec = parseInt(balance.balance) / (10**decimals);
             console.log(balanceDec)
@@ -153,7 +151,7 @@ const Balances: NextPage = () => {
     };
     const fetchTokenTransfers = async () => {
         console.log("account",account)
-        const address = account.toLowerCase();
+        const address = account?.toLowerCase();
         const fromQuery = new Moralis.Query('TransfersMMTSevMumbai');
         fromQuery.equalTo("from", address)
         const toQuery = new Moralis.Query('TransfersMMTSevMumbai');
@@ -214,6 +212,7 @@ const Balances: NextPage = () => {
                 />
   
                 <RoundButton
+                onClick={()=>console.log("send click")}
                     className=" my-3 ml-5 mr-10 basis-1/4 self-center"
                 >
                     Send
