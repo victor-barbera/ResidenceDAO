@@ -1,24 +1,35 @@
 import type { NextPage } from 'next'
-import {  useState } from 'react'
+import {  useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
+import { useMoralisQuery } from 'react-moralis'
 import { Tab } from '@headlessui/react'
 import ClosedPoll from '../../components/ClosedPoll'
 import { Poll } from '../../interfaces'
+import { historyPollsAtom } from '../../store/atoms'
 
 const TABS = ['All', 'Approved', 'Rejected']
 
 const History: NextPage = () => {
-  const [tabscontent, setTabscontent] = useState([
-    DUMMY_POLLS,
-    DUMMY_POLLS.filter((poll) => poll.status === 'Approved'),
-    DUMMY_POLLS.filter((poll) => poll.status === 'Rejected'),
-  ])
+  const historyPolls = useAtomValue(historyPollsAtom)
+  const [hPolls, setHPolls] = useState<Poll[]>([])
+  const { data: resultsData, isLoading: resultsLoading } = useMoralisQuery("Results",query=>query.descending("pollId_decimal"),[],{live:true})
+  const tabscontent = [
+    hPolls,
+    hPolls.filter((poll) => poll.status === 'Approved'),
+    hPolls.filter((poll) => poll.status === 'Rejected'),
+  ]
+  useEffect(()=>{
+    if(!resultsLoading  && resultsData.length && historyPolls.length) {
+      resultsData.map(result=> {
+        const i = historyPolls.findIndex( poll => poll.id === result.attributes.pollId)
+        historyPolls[i].status = decodeResult(result.attributes.result)
+      })
+      setHPolls(historyPolls)
+    }
+  },[resultsData, historyPolls])
   return (
-    <>
-      <h1 className="mt-10 text-2xl font-semibold text-white antialiased">
-        {DUMMY_POLLS.length} CLOSED POLLS
-      </h1>
       <Tab.Group>
-        <Tab.List className="flex mt-2">
+        <Tab.List className="flex mt-10">
           {TABS.map((category) => (
             <Tab
               key={category}
@@ -36,63 +47,12 @@ const History: NextPage = () => {
           ))}
         </Tab.Panels>
       </Tab.Group>
-    </>
   )
 }
 
-const DUMMY_POLLS: Array<Poll> = [
-  {
-    id: 2,
-    title: 'Titol del proposal - XIP1334',
-    description:
-      'Una curta descripció per descriure per sobre la proposal.',
-    date: Date.now(),
-    value: 'Yes',
-    result: { yes: 23, no: 47, blank: 10 },
-    qty: 10,
-    addr: '0x06D...6583',
-    //duration: 7,
-    status: 'Approved',
-  },
-  {
-    id: 3,
-    title: 'Encara falta per les metaproposals - XIP1334',
-    description:
-      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: Date.now(),
-    value: 'No',
-    result: { yes: 23, no: 47, blank: 10 },
-    qty: 36,
-    addr: '0x06D...6583',
-    //duration: 30,
-    status: 'Approved',
-  },
-  {
-    id: 4,
-    title: 'Titol del proposal - XIP1334',
-    description:
-      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: Date.now(),
-    value: 'Yes',
-    result: { yes: 23, no: 47, blank: 10 },
-    qty: 10,
-    addr: '0x06D...6583',
-    //duration: 30,
-    status: 'Rejected',
-  },
-  {
-    id: 5,
-    title: 'Encara falta per les metaproposals - XIP1334',
-    description:
-      'Una curta descripció per descriure per sobre la proposal, la descripció llarga de moment a Github del repositori.',
-    date: Date.now(),
-    value: 'Yes',
-    result: { yes: 23, no: 47, blank: 10 },
-    qty: 36,
-    addr: '0x06D...6583',
-    //duration: 7,
-    status: 'Rejected',
-  },
-]
-
-export default History
+const decodeResult = (vote: string) => {
+  switch(vote) {
+    case "1": return "Approved"
+    case "2": return "Rejected"
+  }
+}

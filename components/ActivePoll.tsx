@@ -1,11 +1,15 @@
 import { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { useAtomValue } from 'jotai'
 import { useMoralis } from 'react-moralis'
 import { ethers } from 'ethers'
 import Poll from './Poll'
 import RoundButton from './RoundButton'
 import { signTransferWithAuthorization } from '../lib'
-import DAO from '../Contracts/DAO.json'
+import DAO from '../contracts/abi/DAO.json'
+import {gBalanceAtom} from '../store/atoms'
+import toast from 'react-hot-toast'
+
 
 function secondsToDhm(seconds: number) {
   seconds = Number(seconds);
@@ -22,12 +26,13 @@ function secondsToDhm(seconds: number) {
 const displayAmount = (amount: number, decimals: number) => amount/(10**decimals)
 
 const ActivePoll = (props: any) => {
+  const gBalance = useAtomValue(gBalanceAtom)
   const [mVisible, setMV] = useState(false)
   const [remaining, setRemaining] = useState("")
   const [votedcolor, setVotedcolor] = useState("text-blue")
   const { account, isAuthenticated, web3, provider } = useMoralis()
   useEffect(()=>{
-    setRemaining(secondsToDhm(Math.floor(props.date+Number(process.env.NEXT_PUBLIC_POLL_DURATION) - (Date.now()/1000))))
+    setRemaining(secondsToDhm(Math.floor((props.date+Number(process.env.NEXT_PUBLIC_POLL_DURATION)*1000 - Date.now())/1000)))
   })
   useEffect(()=>{
     switch(props.value) {
@@ -51,7 +56,8 @@ const ActivePoll = (props: any) => {
       }
       
       const voteClickHandler = ()=> {
-         setMV(true)
+        if(gBalance) setMV(true)
+        else toast("You don't own governance token")
       }
 
       const handleVote = async (vote: number) => {

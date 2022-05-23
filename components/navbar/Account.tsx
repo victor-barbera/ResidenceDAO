@@ -1,18 +1,31 @@
 import { useEffect, Fragment } from 'react'
-//import Image from 'next/image'
 import { useMoralis } from 'react-moralis'
-import MoralisType from "moralis";
+import { ethers } from 'ethers'
+import { useSetAtom } from 'jotai'
+import IERC20 from '../../contracts/abi/IERC20.json'
+import IERC721 from '../../contracts/abi/IERC721.json'
 import { Menu, Transition } from '@headlessui/react'
 import RoundButton from '../RoundButton'
 import RoundBlockie from '../RoundBlockie'
 import {LogoutIcon} from '@heroicons/react/outline'
+import {gBalanceAtom} from '../../store/atoms'
+
 
 const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
 const Account = () => {
-  const { authenticate, isAuthenticated, account, logout, isWeb3Enabled, isWeb3EnableLoading, enableWeb3 } = useMoralis()
+  const { authenticate, isAuthenticated, account, logout, isWeb3Enabled, isWeb3EnableLoading, enableWeb3, web3 } = useMoralis()
+  const setGBalance = useSetAtom(gBalanceAtom)
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3()
+    const getTokenData = async () => {
+      const gContract = new ethers.Contract(process.env.NEXT_PUBLIC_GTOKEN_ADDRESS!,IERC20.abi, web3?.getSigner())
+      // const rContract = new ethers.Contract(process.env.NEXT_PUBLIC_RTOKEN_ADDRESS!,IERC721.abi, web3?.getSigner())
+      setGBalance((await gContract.balanceOf(account)).toNumber())
+    }
+    if (account) {
+      getTokenData()
+    }
   }, [isAuthenticated, isWeb3Enabled])
   const handleAuthenticateClick = () =>
     authenticate({ signingMessage: 'Login with you metamask wallet' })

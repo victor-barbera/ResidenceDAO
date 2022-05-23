@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast'
+import moment from 'moment'
 import {ClipboardIcon} from '@heroicons/react/outline'
 
 const addrShortener = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
@@ -13,7 +14,7 @@ const Poll = (props: any) => {
     <div className="bg-slate-900 border border-slate-600 rounded-lg my-8 pt-5 px-5 lg:w-[56rem]">
       <div className="flex flex-row">
         <div>
-          <p className="text-slate-700 text-sm">POSTED ON {props.date} | POLL ID {props.id}</p>
+          <p className="text-slate-700 text-sm">POSTED ON {moment(props.date).format('MMMM Do YYYY, h:mm a')} | POLL ID {props.id}</p>
           <h2 className="text-slate-300 text-lg">{props.title}</h2>
         </div>
         <div className="flex items-center rounded bg-slate-800 ml-auto my-auto py-2 px-3">

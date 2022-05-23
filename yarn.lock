@@ -3150,6 +3150,11 @@ jayson@^3.4.4:
     uuid "^8.3.2"
     ws "^7.4.5"
 
+jotai@^1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.6.7.tgz#d5bdc747b66e369f1d1e859dad8bcda85acb946f"
+  integrity sha512-MxAm86FYHm6asU3O1hbTKOWpPMP5oI8zNlgFRpZBB85cX79psF2eRb7ZqdGewOgYUUUKAlzZ+sH0IM7Pea6MkA==
+
 js-sha3@0.8.0, js-sha3@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/js-sha3/-/js-sha3-0.8.0.tgz#b9b7a5da73afad7dedd0f8c463954cbde6818840"
@@ -3484,6 +3489,11 @@ minimist@^1.1.1:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
+
+moment@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
+  integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
 
 moralis@^1.5.8:
   version "1.5.8"
