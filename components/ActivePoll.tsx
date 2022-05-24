@@ -51,8 +51,8 @@ const ActivePoll = (props: any) => {
       const leadingOption = ()=> {
         const total = props.result.yes + props.result.no + props.result.blank
         if(props.result.yes == props.result.no) return "it's a draw"
-        if(props.result.yes > props.result.no) return `Yes with ${props.result.yes/total*100}%`
-        return `No with ${props.result.no/total*100}%`
+        if(props.result.yes > props.result.no) return `Yes with ${Math.floor(props.result.yes/total*100)}%`
+        return `No with ${Math.floor(props.result.no/total*100)}%`
       }
       
       const voteClickHandler = ()=> {
@@ -63,16 +63,16 @@ const ActivePoll = (props: any) => {
       const handleVote = async (vote: number) => {
         setMV(false)
         const signature = await signTransferWithAuthorization(account, process.env.NEXT_PUBLIC_DAO_ADDRESS, props.qty, provider)
-        console.log(signature)
         const contract = new ethers.Contract(process.env.NEXT_PUBLIC_DAO_ADDRESS!,DAO.abi, web3?.getSigner())
         const transaction = await contract.voteWithDeposit(props.id, vote, signature.from, signature.to, signature.value, signature.validAfter, signature.validBefore, signature.nonce, signature.v, signature.r, signature.s);
         await transaction.wait()
+        toast.success("Your vote has been submited")
       }
 
   return (
   <>
-    <Poll {...props} footerText={`Leading option: ${leadingOption()}`}> {/* TODO: Posar el Yes en negrita (renderProps?¿) */}
-      <p className='text-slate-300 my-3'>{props.description}</p> {/* TODO: Falta afegir un link a github */}
+    <Poll {...props} footerText={`Leading option: ${leadingOption()}`}>
+      <p className='text-slate-300 my-3'>{props.description}</p>
       <div className="flex items-end">
         <div>
           {isAuthenticated ? (props.value ? <p className={votedcolor}>You've voted <b>{props.value}</b></p> :  <RoundButton onClick={voteClickHandler}>Vote</RoundButton>) : <p className='text-purple-600'>Authenticate to vote</p>}

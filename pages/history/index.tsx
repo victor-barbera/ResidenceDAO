@@ -12,7 +12,7 @@ const TABS = ['All', 'Approved', 'Rejected']
 const History: NextPage = () => {
   const historyPolls = useAtomValue(historyPollsAtom)
   const [hPolls, setHPolls] = useState<Poll[]>([])
-  const { data: resultsData, isLoading: resultsLoading } = useMoralisQuery("Results",query=>query.descending("pollId_decimal"),[],{live:true})
+  const { data: resultsData, isLoading: resultsLoading } = useMoralisQuery("ResultsDAO",query=>query.descending("pollId_decimal"),[],{live:true})
   const tabscontent = [
     hPolls,
     hPolls.filter((poll) => poll.status === 'Approved'),
@@ -56,3 +56,5 @@ const decodeResult = (vote: string) => {
     case "2": return "Rejected"
   }
 }
+
+export default History

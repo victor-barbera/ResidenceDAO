@@ -28,8 +28,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 const AppWithMoralis = ({children}) => {
   const setPolls = useSetAtom(pollsAtom)
   const { account } = useMoralis()
-  const { data: pollsData, isLoading: pollsLoading } = useMoralisQuery("Polls",query=>query.descending("pollId_decimal"),[],{live:true})
-  const { data: votesData, isLoading: votesLoading } = useMoralisQuery("Votes", query=>query.descending("pollId_decimal"),[],{live:true})
+  const { data: pollsData, isLoading: pollsLoading } = useMoralisQuery("PollsDAO",query=>query.descending("pollId_decimal"),[],{live:true})
+  const { data: votesData, isLoading: votesLoading } = useMoralisQuery("VotesDAO", query=>query.descending("pollId_decimal"),[],{live:true})
   useEffect(()=>{
     const getPollVotes = (pollId: string) => {
       const result = {yes: 0, no: 0, blank:0}
