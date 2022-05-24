@@ -24,8 +24,8 @@ const History: NextPage = () => {
         const i = historyPolls.findIndex( poll => poll.id === result.attributes.pollId)
         historyPolls[i].status = decodeResult(result.attributes.result)
       })
-      setHPolls(historyPolls)
     }
+    setHPolls(historyPolls)
   },[resultsData, historyPolls])
   return (
       <Tab.Group>
